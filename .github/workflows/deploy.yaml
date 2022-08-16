@@ -4,10 +4,12 @@ on:
   push:
     branches:
       - main
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
 jobs:
   build-server:
-    name: "Build and Text Phoenix server"
+    name: "Build and Test Phoenix server"
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -50,3 +52,5 @@ jobs:
       - run: "mix ecto.create"
       - run: "mix ecto.migrate"
       - run: "mix test"
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only
