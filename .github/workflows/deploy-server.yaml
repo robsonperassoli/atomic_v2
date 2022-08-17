@@ -1,15 +1,18 @@
-name: "Build and Deploy Atomic"
+name: "Build and Deploy Atomic Server"
 
 on:
   push:
+    paths:
+      - "atomic/**"
+
     branches:
       - main
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
 jobs:
-  build-server:
-    name: "Build and Test Phoenix server"
+  build:
+    name: "Build, Test and Deploy Phoenix server"
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -31,6 +34,7 @@ jobs:
     defaults:
       run:
         working-directory: "./atomic"
+
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v3"

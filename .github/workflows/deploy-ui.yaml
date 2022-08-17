@@ -1,0 +1,47 @@
+name: "Build and Deploy Atomic UI"
+
+on:
+  push:
+    paths:
+      - "atomic_ui/**"
+
+    branches:
+      - main
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+jobs:
+  build-ui:
+    name: "Build, Test and Deploy NextJS UI"
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: "./atomic_ui"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v3"
+
+      - name: "Setup NodeJS"
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+
+      - name: Restore dependencies cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-npm-
+
+      - run: "yarn install"
+      - run: "yarn run build"
+
+      - name: "Deploy to Vercel"
+        uses: "amondnet/vercel-action@v25"
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-project-id: ${{ secrets.ATOMIC_VERCEL_PROJECT_ID }}
+          vercel-org-id: ${{ secrets.ATOMIC_VERCEL_ORG_ID }}
+          vercel-args: "--prod"
