@@ -20,6 +20,10 @@ if System.get_env("PHX_SERVER") do
   config :atomic, AtomicWeb.Endpoint, server: true
 end
 
+config :ueberauth, Ueberauth.Strategy.Github.OAuth,
+  client_id: {:system, "GITHUB_CLIENT_ID"},
+  client_secret: {:system, "GITHUB_CLIENT_SECRET"}
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||

@@ -1,8 +1,19 @@
 defmodule AtomicWeb.Router do
   use AtomicWeb, :router
 
+  pipeline :browser do
+    plug Ueberauth
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
+  end
+
+  scope "/auth", AtomicWeb do
+    pipe_through :browser
+
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :callback
   end
 
   scope "/api", AtomicWeb do
