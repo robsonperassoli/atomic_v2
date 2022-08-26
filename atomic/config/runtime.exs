@@ -21,8 +21,11 @@ if System.get_env("PHX_SERVER") do
 end
 
 config :ueberauth, Ueberauth.Strategy.Github.OAuth,
-  client_id: {:system, "GITHUB_CLIENT_ID"},
-  client_secret: {:system, "GITHUB_CLIENT_SECRET"}
+  client_id: System.get_env("GITHUB_CLIENT_ID"),
+  client_secret: System.get_env("GITHUB_CLIENT_SECRET")
+
+config :atomic, :frontend_app,
+  auth_redirect_url: System.get_env("FRONTEND_AUTH_REDIRECT_URL")
 
 if config_env() == :prod do
   database_url =

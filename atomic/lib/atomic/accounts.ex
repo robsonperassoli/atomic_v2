@@ -101,4 +101,27 @@ defmodule Atomic.Accounts do
   def change_user(%User{} = user, attrs \\ %{}) do
     User.changeset(user, attrs)
   end
+
+
+  def sign_in_with_provider(%Ueberauth.Auth{provider: :github, info: info} = auth) do
+    email = info.email
+
+    get_user_by_provider(:github, email)
+    |> case do
+      nil ->
+        User.github_registration_changeset(auth)
+        |> Repo.insert()
+
+      user ->
+        {:ok, user}
+    end
+  end
+
+  def get_user_by_provider(provider, email) do
+    from(u in User,
+      join: i in assoc(u, :identities),
+      where: i.provider == ^to_string(provider) and i.provider_email == ^email
+    )
+    |> Repo.one()
+  end
 end
