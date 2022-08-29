@@ -3,6 +3,8 @@ defmodule AtomicWeb.Schema do
 
   query do
     field :hello, :string do
+      middleware(AtomicWeb.Schema.AuthenticationMiddleware)
+
       resolve(&AtomicWeb.Schema.Resolvers.hello/3)
     end
   end

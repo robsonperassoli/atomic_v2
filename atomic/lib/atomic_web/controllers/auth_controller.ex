@@ -3,6 +3,7 @@ defmodule AtomicWeb.AuthController do
 
   alias Atomic.Accounts
   alias Atomic.Accounts.Session
+  alias AtomicWeb.UserAuth
 
   @max_age 60 * 60 * 24 * 60
   @cookie_key "user_token"
@@ -18,16 +19,12 @@ defmodule AtomicWeb.AuthController do
          {:ok, %Session{token: token}} <- Accounts.create_session(user) do
       conn
       |> put_resp_cookie(@cookie_key, token, @cookie_options)
-      |> redirect(external: post_auth_redirect_url())
+      |> redirect(external: UserAuth.post_auth_redirect_url())
     end
   end
 
   def callback(%{assigns: %{ueberauth_failure: _failure}} = conn, _params) do
     conn
-    |> redirect(external: post_auth_redirect_url())
-  end
-
-  defp post_auth_redirect_url() do
-    Application.get_env(:atomic, :frontend_app)[:auth_redirect_url]
+    |> redirect(external: UserAuth.post_auth_redirect_url())
   end
 end

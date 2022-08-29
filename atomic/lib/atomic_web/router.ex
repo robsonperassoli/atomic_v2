@@ -1,16 +1,27 @@
 defmodule AtomicWeb.Router do
   use AtomicWeb, :router
 
+  import AtomicWeb.UserAuth
+
   pipeline :browser do
+    plug :fetch_current_user
+  end
+
+  pipeline :auth do
     plug Ueberauth
   end
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug :fetch_current_user
+  end
+
+  pipeline :graphql do
+    plug AtomicWeb.Schema.Context
   end
 
   scope "/auth", AtomicWeb do
-    pipe_through :browser
+    pipe_through [:browser, :redirect_if_user_is_authenticated, :auth]
 
     get "/:provider", AuthController, :request
     get "/:provider/callback", AuthController, :callback
@@ -20,7 +31,22 @@ defmodule AtomicWeb.Router do
     pipe_through :api
   end
 
-  forward "/api/graphql", Absinthe.Plug, schema: AtomicWeb.Schema
+  scope "/api/graphql" do
+    pipe_through :graphql
+
+    forward "/", Absinthe.Plug, schema: AtomicWeb.Schema
+  end
+
+  if Mix.env() == :dev do
+    scope "/graphiql" do
+      pipe_through :graphql
+
+      forward "/",
+              Absinthe.Plug.GraphiQL,
+              schema: AtomicWeb.Schema,
+              interface: :playground
+    end
+  end
 
   # Enables LiveDashboard only for development
   #

@@ -132,4 +132,9 @@ defmodule Atomic.Accounts do
     |> Session.changeset(%{token: token, user_id: user_id})
     |> Repo.insert()
   end
+
+  def get_user_by_session_token(token) do
+    Session.verify_token_query(token)
+    |> Repo.one()
+  end
 end
