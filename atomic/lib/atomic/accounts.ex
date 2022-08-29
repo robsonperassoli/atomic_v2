@@ -6,7 +6,7 @@ defmodule Atomic.Accounts do
   import Ecto.Query, warn: false
   alias Atomic.Repo
 
-  alias Atomic.Accounts.User
+  alias Atomic.Accounts.{User, Session}
 
   @doc """
   Returns the list of users.
@@ -102,7 +102,6 @@ defmodule Atomic.Accounts do
     User.changeset(user, attrs)
   end
 
-
   def sign_in_with_provider(%Ueberauth.Auth{provider: :github, info: info} = auth) do
     email = info.email
 
@@ -123,5 +122,14 @@ defmodule Atomic.Accounts do
       where: i.provider == ^to_string(provider) and i.provider_email == ^email
     )
     |> Repo.one()
+  end
+
+  def create_session(%User{id: user_id}) do
+    rand_size = 32
+    token = :crypto.strong_rand_bytes(rand_size)
+
+    %Session{}
+    |> Session.changeset(%{token: token, user_id: user_id})
+    |> Repo.insert()
   end
 end
