@@ -47,7 +47,8 @@ defmodule Atomic.MixProject do
       {:absinthe_plug, "~> 1.5"},
       {:dataloader, "~> 1.0.0"},
       {:guardian, "~> 2.2.4"},
-      {:ueberauth_github, "~> 0.8.1"}
+      {:ueberauth_github, "~> 0.8.1"},
+      {:corsica, "~> 1.2"}
     ]
   end
 

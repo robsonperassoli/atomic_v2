@@ -8,7 +8,9 @@ defmodule AtomicWeb.Schema.AuthenticationMiddleware do
 
       _ ->
         resolution
-        |> Absinthe.Resolution.put_result({:error, "unauthenticated"})
+        |> Absinthe.Resolution.put_result(
+          {:error, message: "Not Authenticated", code: "NOT_AUTHENTICATED"}
+        )
     end
   end
 end

@@ -12,6 +12,15 @@ defmodule AtomicWeb.Endpoint do
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
 
+  plug Corsica,
+    max_age: 600,
+    origins: [
+      "http://localhost:3000",
+      "http://atomic.robsonperassoli.com.br"
+    ],
+    allow_headers: ~w(content-type),
+    allow_credentials: true
+
   # Serve at "/" the static files from "priv/static" directory.
   #
   # You should set gzip to true if you are running phx.digest
