@@ -1,6 +1,6 @@
 import { GITHUB_AUTH_URL } from '../config'
 
-const Auth = () => {
+const Login = () => {
   return (
     <div className="max-w-lg mx-auto">
       <a
@@ -13,4 +13,4 @@ const Auth = () => {
   )
 }
 
-export default Auth
+export default Login
