@@ -1,5 +1,8 @@
+import { ApolloProvider, gql, useQuery } from '@apollo/client'
 import Head from 'next/head'
 import Layout from '../components/layout'
+
+import { apolloClient } from '../apollo_client'
 
 import '../styles/globals.css'
 
@@ -12,9 +15,11 @@ function MyApp({ Component, pageProps }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <ApolloProvider client={apolloClient}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ApolloProvider>
     </>
   )
 }
