@@ -15,7 +15,7 @@ defmodule AtomicWeb.Endpoint do
   plug Corsica,
     max_age: 600,
     origins: [
-      "http://localhost:3000",
+      "http://atomic.localhost:3000",
       "https://atomic.robsonperassoli.com.br"
     ],
     allow_headers: ~w(content-type),
