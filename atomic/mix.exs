@@ -10,7 +10,10 @@ defmodule Atomic.MixProject do
       compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      preferred_cli_env: [
+        "test.watch": :test
+      ]
     ]
   end
 
@@ -48,7 +51,10 @@ defmodule Atomic.MixProject do
       {:dataloader, "~> 1.0.0"},
       {:guardian, "~> 2.2.4"},
       {:ueberauth_github, "~> 0.8.1"},
-      {:corsica, "~> 1.2"}
+      {:corsica, "~> 1.2"},
+      {:ex_machina, "~> 2.7.0", only: :test},
+      {:faker, "~> 0.17", only: :test},
+      {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false}
     ]
   end
 

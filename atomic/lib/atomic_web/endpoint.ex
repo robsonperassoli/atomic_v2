@@ -16,6 +16,7 @@ defmodule AtomicWeb.Endpoint do
     max_age: 600,
     origins: [
       "http://atomic.localhost:3000",
+      "http://api.atomic.localhost:4000",
       "https://atomic.robsonperassoli.com.br"
     ],
     allow_headers: ~w(content-type),

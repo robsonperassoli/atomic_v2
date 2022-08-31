@@ -21,7 +21,23 @@ defmodule Atomic.Accounts.Identity do
   @doc false
   def changeset(identity, attrs) do
     identity
-    |> cast(attrs, [:provider, :provider_token, :provider_email, :provider_login, :provider_name, :provider_id, :provider_meta])
-    |> validate_required([:provider, :provider_token, :provider_email, :provider_login, :provider_name, :provider_id, :provider_meta])
+    |> cast(attrs, [
+      :provider,
+      :provider_token,
+      :provider_email,
+      :provider_login,
+      :provider_name,
+      :provider_id,
+      :provider_meta
+    ])
+    |> validate_required([
+      :provider,
+      :provider_token,
+      :provider_email,
+      :provider_login,
+      :provider_name,
+      :provider_id,
+      :provider_meta
+    ])
   end
 end
