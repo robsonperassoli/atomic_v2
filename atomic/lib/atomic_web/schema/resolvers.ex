@@ -16,6 +16,12 @@ defmodule AtomicWeb.Schema.Resolvers do
     ProjectManagement.get_project(user, id)
   end
 
+  def task(_root, %{id: id}, resolution) do
+    user = get_current_user(resolution)
+
+    ProjectManagement.get_task(user, id)
+  end
+
   ################# MUTATIONS ####################
   def create_project(_root, args, resolution) do
     user = get_current_user(resolution)
@@ -33,6 +39,24 @@ defmodule AtomicWeb.Schema.Resolvers do
     user = get_current_user(resolution)
 
     ProjectManagement.delete_project(user, id)
+  end
+
+  def create_task(_root, %{project_id: project_id} = args, resolution) do
+    user = get_current_user(resolution)
+
+    ProjectManagement.create_task(user, project_id, Map.delete(args, :project_id))
+  end
+
+  def delete_task(_root, %{id: id}, resolution) do
+    user = get_current_user(resolution)
+
+    ProjectManagement.delete_task(user, id)
+  end
+
+  def update_task(_root, %{id: id} = args, resolution) do
+    user = get_current_user(resolution)
+
+    ProjectManagement.update_task(user, id, Map.delete(args, :id))
   end
 
   defp get_current_user(%{context: %{current_user: current_user}} = _resolution), do: current_user

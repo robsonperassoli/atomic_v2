@@ -15,4 +15,13 @@ defmodule Atomic.Factory do
       created_by_user: build(:user)
     }
   end
+
+  def task_factory() do
+    %Atomic.ProjectManagement.Task{
+      content: Faker.Lorem.sentence(),
+      time_sec: 0,
+      created_by_user: build(:user),
+      project: build(:project)
+    }
+  end
 end
