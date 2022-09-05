@@ -2,6 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "@fortawesome/fontawesome-free/scss/fontawesome";
-@import "@fortawesome/fontawesome-free/scss/regular";
-@import "@fortawesome/fontawesome-free/scss/solid";
+@import '@fortawesome/fontawesome-free/scss/fontawesome';
+@import '@fortawesome/fontawesome-free/scss/regular';
+@import '@fortawesome/fontawesome-free/scss/solid';
+
+.week-selector {
+  .react-calendar {
+    &__navigation {
+      @apply flex gap-x-1 border-b p-2;
+
+      &__label {
+        @apply order-1 text-left leading-5 font-semibold text-slate-800;
+      }
+      &__arrow {
+        @apply w-10 h-10 rounded-full hover:bg-slate-100 text-violet-600;
+      }
+      &__prev-button {
+        @apply order-2;
+      }
+      &__next-button {
+        @apply order-2;
+      }
+    }
+    &__month-view {
+      @apply pt-2;
+      &__weekdays {
+        &__weekday {
+          @apply text-sm font-bold w-12 text-center uppercase text-slate-600;
+          > abbr {
+            @apply no-underline;
+          }
+        }
+      }
+      &__days {
+        &__day {
+          @apply text-slate-800;
+
+          &--neighboringMonth {
+            @apply text-slate-400;
+          }
+          &--weekend {
+            @apply text-orange-500;
+          }
+        }
+      }
+    }
+    &__tile {
+      @apply font-medium text-sm w-12 h-10 hover:bg-violet-600 hover:text-white hover:font-bold tracking-wider cursor-pointer;
+      &--active {
+        @apply font-extrabold text-slate-900;
+      }
+    }
+  }
+}

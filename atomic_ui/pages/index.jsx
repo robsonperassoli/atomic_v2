@@ -2,7 +2,8 @@ import { gql, useQuery } from '@apollo/client'
 import useLocalStorage from '../hooks/use_local_storage'
 import ControlBar from '../components/pages/index/control_bar'
 import TaskList from '../components/pages/index/task_list'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
+import { DateTime } from 'luxon'
 
 const PROJECTS_QUERY = gql`
   query ProjectsSelectorQuery {
@@ -19,6 +20,7 @@ const Home = () => {
     'selectedProjectId',
     null
   )
+  const [selectedDate, setSelectedDate] = useState(DateTime.now().toISODate())
 
   const { data, loading } = useQuery(PROJECTS_QUERY, {
     onCompleted: (data) => {
@@ -43,8 +45,14 @@ const Home = () => {
         selectedProject={selectedProject}
         projects={projects}
         onProjectSelected={(p) => setSelectedProjectId(p.id)}
+        selectedDate={selectedDate}
+        onDateChanged={setSelectedDate}
       />
-      <TaskList project={selectedProject} />
+      <TaskList
+        date={selectedDate}
+        onDateChanged={setSelectedDate}
+        project={selectedProject}
+      />
     </>
   )
 }

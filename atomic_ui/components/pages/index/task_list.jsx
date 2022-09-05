@@ -22,17 +22,15 @@ const TASKS_QUERY = gql`
   }
 `
 
-const TaskList = ({ project }) => {
-  const [selectedDate, setSelectedDate] = useState(DateTime.now().toISODate())
-
+const TaskList = ({ project, date, onDateChanged }) => {
   const dateFilter = useMemo(() => {
-    const luxonDate = DateTime.fromISO(selectedDate)
+    const luxonDate = DateTime.fromISO(date)
 
     const startTime = luxonDate.startOf('day').toISO()
     const endTime = luxonDate.endOf('day').toISO()
 
     return { startTime, endTime }
-  }, [selectedDate])
+  }, [date])
 
   const { data, loading } = useQuery(TASKS_QUERY, {
     variables: {
@@ -48,8 +46,8 @@ const TaskList = ({ project }) => {
     <section className="rounded-xl bg-white border border-violet-300 mt-5 overflow-hidden">
       <WeekdaySelector
         className="border-b border-violet-300"
-        value={selectedDate}
-        onChange={setSelectedDate}
+        value={date}
+        onChange={onDateChanged}
       />
       {tasks.length > 0 ? (
         <>

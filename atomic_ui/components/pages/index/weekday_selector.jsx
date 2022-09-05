@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { DateTime, Duration } from 'luxon'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
 const WeekdaySelector = ({ className, value, onChange }) => {
   const weekDates = useMemo(() => {
