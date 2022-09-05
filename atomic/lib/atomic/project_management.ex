@@ -41,6 +41,11 @@ defmodule Atomic.ProjectManagement do
     end
   end
 
+  def list_projects(%User{} = user) do
+    Project.get_user_projects_query(user.id)
+    |> Repo.all()
+  end
+
   def create_task(%User{} = user, project_id, attrs) do
     with {:ok, project} <- get_project(user, project_id) do
       attrs
@@ -52,7 +57,7 @@ defmodule Atomic.ProjectManagement do
   end
 
   def get_task(%User{} = user, task_id) do
-    Task.get_user_task_query(user.id, task_id)
+    Task.user_task_query(user.id, task_id)
     |> Repo.one()
     |> case do
       nil -> {:error, :task_not_found}
@@ -74,4 +79,24 @@ defmodule Atomic.ProjectManagement do
       |> Repo.update()
     end
   end
+
+  def data(current_user) do
+    Dataloader.Ecto.new(Atomic.Repo,
+      query: &query/2,
+      default_params: %{
+        current_user: current_user
+      }
+    )
+  end
+
+  defp query(Task, %{
+         current_user: current_user,
+         start_time: start_time,
+         end_time: end_time
+       }) do
+    Task.by_user_query(current_user.id)
+    |> Task.created_in_interval(start_time, end_time)
+  end
+
+  defp query(queryable, _params), do: queryable
 end

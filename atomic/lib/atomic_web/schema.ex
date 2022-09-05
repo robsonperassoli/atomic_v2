@@ -1,7 +1,22 @@
 defmodule AtomicWeb.Schema do
   use Absinthe.Schema
 
+  alias Atomic.ProjectManagement
+
   import_types AtomicWeb.Schema.Types
+  import_types Absinthe.Type.Custom
+
+  def context(ctx) do
+    loader =
+      Dataloader.new()
+      |> Dataloader.add_source(ProjectManagement, ProjectManagement.data(ctx[:current_user]))
+
+    Map.put(ctx, :loader, loader)
+  end
+
+  def plugins do
+    [Absinthe.Middleware.Dataloader] ++ Absinthe.Plugin.defaults()
+  end
 
   query do
     @deprecated "just a test field"
@@ -23,6 +38,12 @@ defmodule AtomicWeb.Schema do
       middleware AtomicWeb.Schema.AuthenticationMiddleware
 
       resolve &AtomicWeb.Schema.Resolvers.task/3
+    end
+
+    field :projects, list_of(:project) do
+      middleware AtomicWeb.Schema.AuthenticationMiddleware
+
+      resolve &AtomicWeb.Schema.Resolvers.projects/3
     end
   end
 

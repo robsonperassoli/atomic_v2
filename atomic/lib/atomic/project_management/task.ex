@@ -37,8 +37,19 @@ defmodule Atomic.ProjectManagement.Task do
     |> validate_number(:time_sec, greater_than_or_equal_to: 0)
   end
 
-  def get_user_task_query(user_id, task_id) do
+  def by_user_query(user_id) do
     from t in Task,
-      where: t.id == ^task_id and t.created_by_user_id == ^user_id
+      where: t.created_by_user_id == ^user_id,
+      order_by: {:desc, :inserted_at}
+  end
+
+  def user_task_query(user_id, task_id) do
+    from t in by_user_query(user_id),
+      where: t.id == ^task_id
+  end
+
+  def created_in_interval(%Ecto.Query{} = query, start_time, end_time) do
+    from t in query,
+      where: t.inserted_at >= ^start_time and t.inserted_at <= ^end_time
   end
 end

@@ -84,6 +84,30 @@ defmodule Atomic.ProjectManagementTest do
 
       assert {:error, :not_found} = ProjectManagement.delete_project(malicious_user, project.id)
     end
+
+    test "get project works", %{user: user} do
+      project = insert(:project, created_by_user: user)
+
+      assert {:ok, found_project} = ProjectManagement.get_project(user, project.id)
+      assert project.id == found_project.id
+    end
+
+    test "get project respects ownership", %{user: user} do
+      malicious_user = insert(:user)
+
+      project = insert(:project, created_by_user: user)
+
+      assert {:error, :not_found} = ProjectManagement.get_project(malicious_user, project.id)
+    end
+
+    test "list user projects works", %{user: user} do
+      other_user = insert(:user)
+      insert_list(5, :project, created_by_user: user)
+      insert_list(5, :project, created_by_user: other_user)
+
+      assert projects = ProjectManagement.list_projects(user)
+      assert Enum.count(projects) == 5
+    end
   end
 
   describe "tasks" do

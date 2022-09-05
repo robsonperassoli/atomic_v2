@@ -5,11 +5,13 @@ defmodule Atomic.ProjectManagement.Project do
 
   alias Atomic.Accounts.User
   alias Atomic.ProjectManagement.Project
+  alias Atomic.ProjectManagement.Task
 
   schema "projects" do
     field :abbreviation, :string
     field :name, :string
     belongs_to :created_by_user, User
+    has_many :tasks, Task
 
     timestamps()
   end
@@ -23,7 +25,12 @@ defmodule Atomic.ProjectManagement.Project do
   end
 
   def get_user_project_query(user_id, project_id) do
+    from p in get_user_projects_query(user_id),
+      where: p.id == ^project_id
+  end
+
+  def get_user_projects_query(user_id) do
     from p in Project,
-      where: p.id == ^project_id and p.created_by_user_id == ^user_id
+      where: p.created_by_user_id == ^user_id
   end
 end

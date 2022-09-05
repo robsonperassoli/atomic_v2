@@ -16,6 +16,12 @@ defmodule AtomicWeb.Schema.Resolvers do
     ProjectManagement.get_project(user, id)
   end
 
+  def projects(_root, _args, resolution) do
+    user = get_current_user(resolution)
+
+    {:ok, ProjectManagement.list_projects(user)}
+  end
+
   def task(_root, %{id: id}, resolution) do
     user = get_current_user(resolution)
 
