@@ -6,6 +6,7 @@ const ControlBar = ({
   selectedProject,
   projects,
   onProjectSelected,
+  onCreateProject,
   selectedDate,
   onDateChanged,
 }) => {
@@ -21,6 +22,7 @@ const ControlBar = ({
         selected={selectedProject}
         projects={projects}
         onChange={onProjectSelected}
+        onCreate={onCreateProject}
         className="justify-self-end"
       />
     </section>

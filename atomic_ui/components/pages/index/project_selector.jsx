@@ -18,7 +18,13 @@ const ItemButton = forwardRef(({ children, active = false, onClick }, ref) => {
   )
 })
 
-const ProjectSelector = ({ selected, projects, onChange, className = '' }) => {
+const ProjectSelector = ({
+  selected,
+  projects,
+  onChange,
+  onCreate,
+  className = '',
+}) => {
   const projectsOptions = useMemo(
     () => (selected ? projects.filter((p) => p.id !== selected.id) : projects),
     [selected?.id]
@@ -50,7 +56,7 @@ const ProjectSelector = ({ selected, projects, onChange, className = '' }) => {
         <hr className="my-1 border-slate-200" />
         <Menu.Item as="div">
           {({ active }) => (
-            <ItemButton active={active}>
+            <ItemButton active={active} onClick={onCreate}>
               <i className="fas fa-plus text-xl mr-2" /> Create Project
             </ItemButton>
           )}
