@@ -24,4 +24,29 @@ defmodule Atomic.Factory do
       project: build(:project)
     }
   end
+
+  def started_task_factory do
+    struct!(
+      task_factory(),
+      %{
+        last_started_at:
+          Timex.now()
+          |> Timex.shift(hours: -1),
+        status: :running
+      }
+    )
+  end
+
+  def stopped_task_factory do
+    struct!(
+      task_factory(),
+      %{
+        last_started_at:
+          Timex.now()
+          |> Timex.shift(hours: -1),
+        last_stopped_at: Timex.now(),
+        status: :stopped
+      }
+    )
+  end
 end

@@ -2,14 +2,6 @@ defmodule AtomicWeb.Schema.Resolvers do
   alias Atomic.ProjectManagement
 
   ################# QUERIES #####################
-  def hello(root, args, resolution) do
-    IO.inspect(resolution)
-    IO.inspect(root)
-    IO.inspect(args)
-
-    {:ok, "world"}
-  end
-
   def project(_root, %{id: id}, resolution) do
     user = get_current_user(resolution)
 
@@ -57,6 +49,18 @@ defmodule AtomicWeb.Schema.Resolvers do
     user = get_current_user(resolution)
 
     ProjectManagement.delete_task(user, id)
+  end
+
+  def start_task_timer(_root, %{task_id: task_id}, resolution) do
+    user = get_current_user(resolution)
+
+    ProjectManagement.start_task_timer(user, task_id)
+  end
+
+  def stop_task_timer(_root, %{task_id: task_id}, resolution) do
+    user = get_current_user(resolution)
+
+    ProjectManagement.stop_task_timer(user, task_id)
   end
 
   def update_task(_root, %{id: id} = args, resolution) do

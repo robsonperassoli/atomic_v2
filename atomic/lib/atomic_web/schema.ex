@@ -19,13 +19,6 @@ defmodule AtomicWeb.Schema do
   end
 
   query do
-    @deprecated "just a test field"
-    field :hello, :string do
-      middleware AtomicWeb.Schema.AuthenticationMiddleware
-
-      resolve &AtomicWeb.Schema.Resolvers.hello/3
-    end
-
     field :project, :project do
       arg :id, :id
       middleware AtomicWeb.Schema.AuthenticationMiddleware
@@ -83,6 +76,22 @@ defmodule AtomicWeb.Schema do
       middleware AtomicWeb.Schema.AuthenticationMiddleware
 
       resolve &AtomicWeb.Schema.Resolvers.create_task/3
+    end
+
+    field :start_task_timer, :task do
+      arg :task_id, non_null(:id)
+
+      middleware AtomicWeb.Schema.AuthenticationMiddleware
+
+      resolve &AtomicWeb.Schema.Resolvers.start_task_timer/3
+    end
+
+    field :stop_task_timer, :task do
+      arg :task_id, non_null(:id)
+
+      middleware AtomicWeb.Schema.AuthenticationMiddleware
+
+      resolve &AtomicWeb.Schema.Resolvers.stop_task_timer/3
     end
 
     field :delete_task, :task do

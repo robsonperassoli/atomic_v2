@@ -52,6 +52,7 @@ defmodule Atomic.MixProject do
       {:guardian, "~> 2.2.4"},
       {:ueberauth_github, "~> 0.8.1"},
       {:corsica, "~> 1.2"},
+      {:timex, "~> 3.7.9"},
       {:ex_machina, "~> 2.7.0", only: :test},
       {:faker, "~> 0.17", only: :test},
       {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false}

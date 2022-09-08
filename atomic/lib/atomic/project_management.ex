@@ -80,6 +80,22 @@ defmodule Atomic.ProjectManagement do
     end
   end
 
+  def start_task_timer(%User{} = user, task_id) do
+    with {:ok, task} <- get_task(user, task_id) do
+      task
+      |> Task.start_timer_changeset()
+      |> Repo.update()
+    end
+  end
+
+  def stop_task_timer(%User{} = user, task_id) do
+    with {:ok, task} <- get_task(user, task_id) do
+      task
+      |> Task.stop_timer_changeset()
+      |> Repo.update()
+    end
+  end
+
   def data(current_user) do
     Dataloader.Ecto.new(Atomic.Repo,
       query: &query/2,
