@@ -18,6 +18,8 @@ const ItemButton = forwardRef(({ children, active = false, onClick }, ref) => {
   )
 })
 
+ItemButton.displayName = 'ItemButton'
+
 const ProjectSelector = ({
   selected,
   projects,
@@ -65,5 +67,7 @@ const ProjectSelector = ({
     </Menu>
   )
 }
+
+// ProjectSelector.displayName = 'ProjectSelector'
 
 export default ProjectSelector
