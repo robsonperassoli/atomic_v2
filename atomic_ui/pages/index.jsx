@@ -24,10 +24,14 @@ const TASK_LIST_QUERY = gql`
     $endTime: DateTime!
   ) {
     project(id: $projectId) {
+      id
       tasks(startTime: $startTime, endTime: $endTime) {
         id
         content
         timeSec
+        status
+        lastStartedAt
+        lastStoppedAt
       }
     }
   }

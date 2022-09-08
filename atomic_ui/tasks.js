@@ -1,4 +1,4 @@
 export const TASK_STATUSES = {
-  RUNNING: 'running',
-  STOPPED: 'stopped',
+  RUNNING: 'RUNNING',
+  STOPPED: 'STOPPED',
 }
