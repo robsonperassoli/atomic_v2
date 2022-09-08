@@ -1,6 +1,7 @@
 import { gql, useMutation } from '@apollo/client'
 import classNames from 'classnames'
 import { DateTime } from 'luxon'
+import useTaskTimer from '../../../hooks/use_task_timer'
 import { TASK_STATUSES } from '../../../tasks'
 import TaskTime from '../../task_time'
 
@@ -50,7 +51,10 @@ const TaskStatusText = ({ lastStoppedAt, lastStartedAt }) => {
     : `Started ${toRelativeTime(lastStartedAt)}`
 
   return (
-    <span className="text-slate-500 text-xs font-medium italic leading-2 block pt-1">
+    <span
+      className="text-slate-500 text-xs font-medium italic leading-2 block pt-1"
+      title={DateTime.fromISO(lastStoppedAt || lastStartedAt).toFormat('FF')}
+    >
       {text}
     </span>
   )
@@ -67,6 +71,8 @@ const Task = ({
 }) => {
   const [stopTimer] = useMutation(STOP_TIMER_MUTATION)
   const [startTimer] = useMutation(START_TIMER_MUTATION)
+
+  const timeInSec = useTaskTimer({ status, timeSec, startedAt: lastStartedAt })
 
   return (
     <li
@@ -88,7 +94,7 @@ const Task = ({
 
       <div>
         <TaskTime
-          timeInSec={timeSec}
+          timeInSec={timeInSec}
           active={status === TASK_STATUSES.RUNNING}
           className="mr-4"
         />
