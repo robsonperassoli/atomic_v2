@@ -45,17 +45,22 @@ const ProjectSelector = ({
       </Menu.Button>
 
       <Menu.Items className="absolute right-0 bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm mt-1 min-w-[15rem]">
-        {projectsOptions.map((p) => (
-          <Menu.Item as="div" key={p.id}>
-            {({ active }) => (
-              <ItemButton active={active} onClick={() => onChange(p)}>
-                {p.name} <small>[{p.abbreviation}]</small>
-              </ItemButton>
-            )}
-          </Menu.Item>
-        ))}
+        {projectsOptions?.length > 0 && (
+          <>
+            {projectsOptions.map((p) => (
+              <Menu.Item as="div" key={p.id}>
+                {({ active }) => (
+                  <ItemButton active={active} onClick={() => onChange(p)}>
+                    {p.name} <small>[{p.abbreviation}]</small>
+                  </ItemButton>
+                )}
+              </Menu.Item>
+            ))}
 
-        <hr className="my-1 border-slate-200" />
+            <hr className="my-1 border-slate-200" />
+          </>
+        )}
+
         <Menu.Item as="div">
           {({ active }) => (
             <ItemButton active={active} onClick={onCreate}>
