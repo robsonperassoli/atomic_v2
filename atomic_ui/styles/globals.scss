@@ -48,7 +48,7 @@
       }
     }
     &__tile {
-      @apply font-medium text-sm w-12 h-10 hover:bg-violet-600 hover:text-white hover:font-bold tracking-wider cursor-pointer;
+      @apply font-medium text-sm w-12 h-10 hover:bg-violet-600 hover:text-white hover:font-bold transition-colors duration-150 tracking-wider cursor-pointer;
       &--active {
         @apply font-extrabold text-slate-900;
       }

@@ -6,15 +6,16 @@ const ControlBar = ({
   selectedProject,
   projects,
   onProjectSelected,
-  onCreateProject,
   selectedDate,
   onDateChanged,
+  onCreateProject,
+  onCreateTask,
 }) => {
   return (
     <section className="flex items-end justify-start gap-4 mt-4">
       <WeekSelector date={selectedDate} onChange={onDateChanged} />
 
-      <CreateTaskButton />
+      <CreateTaskButton onClick={onCreateTask} />
 
       <div className="flex-grow" />
 

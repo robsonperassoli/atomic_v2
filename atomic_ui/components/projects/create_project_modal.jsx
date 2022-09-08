@@ -3,8 +3,8 @@ import { Dialog } from '@headlessui/react'
 import classNames from 'classnames'
 import { Field, Form, Formik, useField } from 'formik'
 import { object, string } from 'yup'
-import { create } from 'yup/lib/array'
 import Modal from '../modal'
+import FieldError from '../forms/field_error'
 
 const CREATE_PROJECT_MUTATION = gql`
   mutation CreateProject($name: String!, $abbreviation: String!) {
@@ -37,20 +37,6 @@ const Label = ({ htmlFor, children }) => {
       {children}
     </label>
   )
-}
-
-const Error = ({ forField }) => {
-  const [_field, meta, _helpers] = useField(forField)
-
-  if (meta.touched && meta.error) {
-    return (
-      <span className="text-sm text-pink-600 pt-1 italic tracking-wide">
-        {meta.error}
-      </span>
-    )
-  }
-
-  return null
 }
 
 const CreateProjectModal = ({
@@ -96,7 +82,7 @@ const CreateProjectModal = ({
                 name="name"
                 placeholder="e.g. Redesign the App, Build V2 platform"
               />
-              <Error forField="name" />
+              <FieldError forField="name" />
             </div>
 
             <div className="flex flex-col mt-3">
@@ -107,7 +93,7 @@ const CreateProjectModal = ({
                 placeholder="e.g. ATM0001"
                 className="max-w-[10rem]"
               />
-              <Error forField="abbreviation" />
+              <FieldError forField="abbreviation" />
             </div>
 
             <button

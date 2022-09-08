@@ -9,7 +9,7 @@ const ItemButton = forwardRef(({ children, active = false, onClick }, ref) => {
       type="button"
       onClick={onClick}
       className={classNames(
-        'block px-3 py-3 w-full text-left font-medium ',
+        'block px-3 py-3 w-full text-left font-medium transition-colors duration-150',
         active ? 'bg-purple-600 text-white' : 'text-slate-700'
       )}
     >

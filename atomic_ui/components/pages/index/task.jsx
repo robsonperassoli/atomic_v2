@@ -24,7 +24,7 @@ const Task = ({
   return (
     <li
       className={classNames(
-        'flex items-center justify-between py-2',
+        'flex items-center justify-between py-4',
         className
       )}
     >

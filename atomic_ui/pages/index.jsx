@@ -5,6 +5,7 @@ import TaskList from '../components/pages/index/task_list'
 import { useMemo, useState } from 'react'
 import { DateTime } from 'luxon'
 import CreateProjectModal from '../components/projects/create_project_modal'
+import CreateTaskModal from '../components/projects/create_task_modal'
 
 const PROJECTS_QUERY = gql`
   query ProjectsSelectorQuery {
@@ -16,8 +17,25 @@ const PROJECTS_QUERY = gql`
   }
 `
 
+const TASK_LIST_QUERY = gql`
+  query TaskListQuery(
+    $projectId: ID!
+    $startTime: DateTime!
+    $endTime: DateTime!
+  ) {
+    project(id: $projectId) {
+      tasks(startTime: $startTime, endTime: $endTime) {
+        id
+        content
+        timeSec
+      }
+    }
+  }
+`
+
 const MODALS = {
   CREATE_PROJECT: 'CREATE_PROJECT',
+  CREATE_TASK: 'CREATE_TASK',
 }
 
 const Home = () => {
@@ -40,6 +58,27 @@ const Home = () => {
     },
   })
 
+  const dateFilter = useMemo(() => {
+    const luxonDate = DateTime.fromISO(selectedDate)
+
+    const startTime = luxonDate.startOf('day').toISO()
+    const endTime = luxonDate.endOf('day').toISO()
+
+    return { startTime, endTime }
+  }, [selectedDate])
+
+  const {
+    data: tasksData,
+    loading: loadingTasks,
+    refetch: refetchTasks,
+  } = useQuery(TASK_LIST_QUERY, {
+    skip: !selectedProjectId || !selectedDate,
+    variables: {
+      projectId: selectedProjectId,
+      ...dateFilter,
+    },
+  })
+
   const projects = data?.projects || []
   const selectedProject = useMemo(
     () =>
@@ -48,6 +87,8 @@ const Home = () => {
         : null,
     [projects, selectedProjectId]
   )
+
+  const tasks = tasksData?.project?.tasks || []
 
   const closeModal = () => setModal(null)
 
@@ -58,6 +99,12 @@ const Home = () => {
     refetchProjects()
   }
 
+  const onTaskCreated = (_task) => {
+    closeModal()
+
+    refetchTasks()
+  }
+
   return (
     <>
       <ControlBar
@@ -65,18 +112,26 @@ const Home = () => {
         projects={projects}
         onProjectSelected={(p) => setSelectedProjectId(p.id)}
         onCreateProject={() => setModal(MODALS.CREATE_PROJECT)}
+        onCreateTask={() => setModal(MODALS.CREATE_TASK)}
         selectedDate={selectedDate}
         onDateChanged={setSelectedDate}
       />
       <TaskList
         date={selectedDate}
         onDateChanged={setSelectedDate}
-        project={selectedProject}
+        tasks={tasks}
       />
       <CreateProjectModal
         isOpen={modal === MODALS.CREATE_PROJECT}
         onClose={closeModal}
         onProjectCreated={onProjectCreated}
+      />
+
+      <CreateTaskModal
+        isOpen={modal === MODALS.CREATE_TASK}
+        onClose={closeModal}
+        onTaskCreated={onTaskCreated}
+        projectId={selectedProjectId}
       />
     </>
   )
