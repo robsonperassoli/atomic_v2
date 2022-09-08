@@ -6,6 +6,7 @@ import { useMemo, useState } from 'react'
 import { DateTime } from 'luxon'
 import CreateProjectModal from '../components/projects/create_project_modal'
 import CreateTaskModal from '../components/projects/create_task_modal'
+import Layout from '../components/layout'
 
 const PROJECTS_QUERY = gql`
   query ProjectsSelectorQuery {
@@ -140,5 +141,7 @@ const Home = () => {
     </>
   )
 }
+
+Home.getLayout = (page) => <Layout>{page}</Layout>
 
 export default Home

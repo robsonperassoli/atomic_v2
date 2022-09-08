@@ -1,19 +1,18 @@
-import { ApolloProvider, gql, useQuery } from '@apollo/client'
-import Layout from '../components/layout'
+import { ApolloProvider } from '@apollo/client'
 import { apolloClient } from '../apollo_client'
 import '../styles/globals.scss'
 import Head from 'next/head'
 
 function MyApp({ Component, pageProps }) {
+  const getLayout = Component.getLayout || ((page) => page)
+
   return (
     <>
       <Head>
         <title>Atomic - Time Tracking</title>
       </Head>
       <ApolloProvider client={apolloClient}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        {getLayout(<Component {...pageProps} />)}
       </ApolloProvider>
     </>
   )
