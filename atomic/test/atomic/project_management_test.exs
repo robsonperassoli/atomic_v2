@@ -188,10 +188,12 @@ defmodule Atomic.ProjectManagementTest do
     end
 
     test "start task timer works", %{user: user} do
-      task = insert(:task, created_by_user: user)
+      task = insert(:task, created_by_user: user, status: :stopped)
 
       assert {:ok, task} = ProjectManagement.start_task_timer(user, task.id)
       assert task.status == :running
+      refute is_nil(task.last_started_at)
+      assert is_nil(task.last_stopped_at)
     end
 
     test "cannot start a started task", %{user: user} do
@@ -205,6 +207,8 @@ defmodule Atomic.ProjectManagementTest do
 
       assert {:ok, task} = ProjectManagement.stop_task_timer(user, task.id)
       assert task.time_sec > 0
+      assert task.status == :stopped
+      refute is_nil(task.last_stopped_at)
     end
 
     test "cannot stop a stopped task", %{user: user} do

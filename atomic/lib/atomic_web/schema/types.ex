@@ -20,5 +20,14 @@ defmodule AtomicWeb.Schema.Types do
     field :id, :id
     field :content, :string
     field :time_sec, :integer
+    field :status, :task_timer_status
+
+    field :last_started_at, :datetime
+    field :last_stopped_at, :datetime
+  end
+
+  enum :task_timer_status do
+    value :running
+    value :stopped
   end
 end

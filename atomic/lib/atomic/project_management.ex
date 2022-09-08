@@ -51,6 +51,7 @@ defmodule Atomic.ProjectManagement do
       attrs
       |> Map.put(:project_id, project.id)
       |> Map.put(:created_by_user_id, user.id)
+      |> Map.put(:status, :running)
       |> Task.changeset()
       |> Repo.insert()
     end

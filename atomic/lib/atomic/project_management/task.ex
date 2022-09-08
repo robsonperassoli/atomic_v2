@@ -11,7 +11,7 @@ defmodule Atomic.ProjectManagement.Task do
     field :last_started_at, :utc_datetime_usec
     field :last_stopped_at, :utc_datetime_usec
     field :time_sec, :integer
-    field :status, Ecto.Enum, values: [:stopped, :running]
+    field :status, Ecto.Enum, values: [:stopped, :running], default: :stopped
 
     belongs_to :project, Project
     belongs_to :created_by_user, User
@@ -33,22 +33,51 @@ defmodule Atomic.ProjectManagement.Task do
       :last_stopped_at,
       :time_sec,
       :created_by_user_id,
-      :project_id
+      :project_id,
+      :status
     ])
-    |> validate_required([:content, :time_sec, :created_by_user_id, :project_id])
+    |> validate_required([:content, :time_sec, :created_by_user_id, :project_id, :status])
     |> validate_number(:time_sec, greater_than_or_equal_to: 0)
-    |> put_status()
+    |> put_timer_dates()
   end
 
-  def put_status(%Ecto.Changeset{} = cs) do
-    last_started_at = get_field(cs, :last_started_at)
-    last_stopped_at = get_field(cs, :last_stopped_at)
+  def put_timer_dates(
+        %Ecto.Changeset{
+          data: %Task{
+            status: current_status,
+            time_sec: current_time_sec,
+            last_started_at: last_started_at
+          }
+        } = cs
+      ) do
+    new_status = get_change(cs, :status)
+    now = Timex.now()
 
-    put_change(cs, :status, status_from_dates(last_started_at, last_stopped_at))
+    case {current_status, new_status} do
+      {:stopped, :running} ->
+        cs
+        |> put_change(:last_started_at, now)
+        |> put_change(:last_stopped_at, nil)
+
+      {:running, :stopped} ->
+        last_time_window_sec =
+          if last_started_at,
+            do: Timex.diff(now, last_started_at, :seconds),
+            else: 0
+
+        new_time_sec = (current_time_sec || 0) + last_time_window_sec
+
+        cs
+        |> put_change(:last_stopped_at, now)
+        |> put_change(:time_sec, new_time_sec)
+
+      _ ->
+        cs
+    end
   end
 
   def start_timer_changeset(%Task{} = task) do
-    cs = changeset(task, %{last_stopped_at: nil, last_started_at: Timex.now()})
+    cs = changeset(task, %{status: :running})
 
     if task.status == :running,
       do: add_error(cs, :status, "cannot start a running task"),
@@ -56,12 +85,9 @@ defmodule Atomic.ProjectManagement.Task do
   end
 
   def stop_timer_changeset(%Task{} = task) do
-    now = Timex.now()
-
     cs =
       changeset(task, %{
-        last_stopped_at: now,
-        time_sec: Timex.diff(now, task.last_started_at, :seconds)
+        status: :stopped
       })
 
     if task.status == :stopped,
@@ -83,17 +109,5 @@ defmodule Atomic.ProjectManagement.Task do
   def created_in_interval(%Ecto.Query{} = query, start_time, end_time) do
     from t in query,
       where: t.inserted_at >= ^start_time and t.inserted_at <= ^end_time
-  end
-
-  defp status_from_dates(nil, nil), do: :stopped
-  defp status_from_dates(started_at, nil) when not is_nil(started_at), do: :running
-
-  defp status_from_dates(nil, stopped_at) when not is_nil(stopped_at),
-    do: raise("Cannot determine status, start time is nil")
-
-  defp status_from_dates(started_at, stopped_at) do
-    if Timex.diff(stopped_at, started_at) > 0,
-      do: :running,
-      else: :stopped
   end
 end
