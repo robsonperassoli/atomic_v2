@@ -22,4 +22,21 @@ const Modal = ({ isOpen, onClose, className = '', children }) => {
   )
 }
 
+const ModalHeader = ({ children, onClose = null }) => (
+  <Dialog.Title className="font-black text-2xl text-violet-700 tracking-wider relative py-3 px-4">
+    {children}
+    {onClose && (
+      <button
+        type="button"
+        className="appearance-none focus:outline-none absolute top-2 right-2 hover:bg-slate-50 rounded-full w-8 h-8 p-2 flex items-center justify-center"
+        onClick={onClose}
+      >
+        <i className="fas fa-times text-2xl text-violet-700" />
+      </button>
+    )}
+  </Dialog.Title>
+)
+
+export { ModalHeader }
+
 export default Modal

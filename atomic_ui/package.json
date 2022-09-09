@@ -21,6 +21,7 @@
     "react-calendar": "^3.7.0",
     "react-dom": "18.2.0",
     "sass": "^1.54.8",
+    "tailwind-merge": "^1.6.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {

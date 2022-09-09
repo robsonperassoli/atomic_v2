@@ -1,10 +1,12 @@
 import { gql, useMutation } from '@apollo/client'
-import { Dialog } from '@headlessui/react'
-import classNames from 'classnames'
-import { Field, Form, Formik, useField } from 'formik'
+import { Duration } from 'luxon'
+import { Form, Formik } from 'formik'
 import { object, string, number } from 'yup'
-import Modal from '../modal'
+import Modal, { ModalHeader } from '../modal'
 import FieldError from '../forms/field_error'
+import Button from '../button'
+import FormField from '../forms/form_field'
+import TaskTime from '../task_time'
 
 const CREATE_TASK_MUTATION = gql`
   mutation CreateTask($projectId: ID!, $content: String!, $timeSec: Int!) {
@@ -18,20 +20,10 @@ const CREATE_TASK_MUTATION = gql`
 
 const validationSchema = object().shape({
   content: string().required('Task Content is required').min(10),
-  timeSec: number()
+  timeMin: number()
     .required('Time is required')
     .min(0, "Time can't be negative"),
 })
-
-const StyledTextField = ({ className = '', ...props }) => (
-  <Field
-    {...props}
-    className={classNames(
-      'border border-violet-300 font-medium text-slate-800 rounded-lg px-3 py-3 placeholder:italic placeholder:text-slate-500 placeholder:text-sm placeholder:font-medium tracking-wide outline-violet-400',
-      className
-    )}
-  />
-)
 
 const Label = ({ htmlFor, children }) => {
   return (
@@ -49,9 +41,9 @@ const CreateTaskModal = ({
 }) => {
   const [createTask] = useMutation(CREATE_TASK_MUTATION)
 
-  const onFormSubmit = async ({ content, timeSec }) => {
+  const onFormSubmit = async ({ content, timeMin }) => {
     const { data } = await createTask({
-      variables: { projectId, content, timeSec },
+      variables: { projectId, content, timeSec: timeMin * 60 },
     })
 
     onTaskCreated(data?.createTask)
@@ -59,21 +51,12 @@ const CreateTaskModal = ({
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} className="max-w-2xl">
-      <Dialog.Title className="font-black text-2xl text-violet-700 tracking-wider relative py-3 px-4">
-        New Task
-        <button
-          type="button"
-          className="appearance-none focus:outline-none absolute top-2 right-2 hover:bg-slate-50 rounded-full w-8 h-8 p-2 flex items-center justify-center"
-          onClick={onClose}
-        >
-          <i className="fas fa-times text-2xl text-violet-700" />
-        </button>
-      </Dialog.Title>
+      <ModalHeader onClose={onClose}>New Task</ModalHeader>
 
       <Formik
         initialValues={{
           content: '',
-          timeSec: 0,
+          timeMin: 0,
         }}
         onSubmit={onFormSubmit}
         validationSchema={validationSchema}
@@ -81,7 +64,7 @@ const CreateTaskModal = ({
         {({ isSubmitting, values }) => (
           <Form className="px-4 pb-6 pt-4">
             <div className="flex flex-col">
-              <StyledTextField
+              <FormField
                 as="textarea"
                 id="content"
                 name="content"
@@ -92,23 +75,32 @@ const CreateTaskModal = ({
             </div>
 
             <div className="flex flex-col sm:flex-row justify-between mt-3 gap-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center gap-x-4">
-                <Label htmlFor="timeSec">Time</Label>
-                <StyledTextField
-                  id="timeSec"
-                  name="timeSec"
-                  className="max-w-[10rem]"
-                />
+              <div className="flex flex-col sm:flex-row sm:items-center">
+                <div className="flex items-center gap-x-4">
+                  <Label htmlFor="timeMin">
+                    Time <small className="text-slate-400">(min)</small>
+                  </Label>
+                  <FormField
+                    id="timeMin"
+                    name="timeMin"
+                    className="max-w-[10rem]"
+                  />
+
+                  {values.timeMin > 0 && (
+                    <TaskTime
+                      timeInSec={Duration.fromObject({
+                        minutes: values.timeMin,
+                      }).as('seconds')}
+                    />
+                  )}
+                </div>
+
                 <FieldError forField="timeSec" />
               </div>
 
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="rounded-lg font-semibold text-2xl tracking-wide text-white bg-violet-500 px-8 py-2 leading-7 block"
-              >
+              <Button type="submit" disabled={isSubmitting}>
                 Create
-              </button>
+              </Button>
             </div>
           </Form>
         )}
