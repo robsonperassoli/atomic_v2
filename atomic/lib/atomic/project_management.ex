@@ -75,6 +75,11 @@ defmodule Atomic.ProjectManagement do
 
   def update_task(%User{} = user, task_id, attrs) do
     with {:ok, task} <- get_task(user, task_id) do
+      attrs =
+        attrs
+        |> Enum.reject(fn {k, v} -> k == :time_sec and is_nil(v) end)
+        |> Map.new()
+
       task
       |> Task.changeset(attrs)
       |> Repo.update()

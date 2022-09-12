@@ -25,7 +25,7 @@ defmodule Atomic.Factory do
     }
   end
 
-  def started_task_factory do
+  def running_task_factory do
     struct!(
       task_factory(),
       %{

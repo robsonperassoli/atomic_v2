@@ -187,6 +187,23 @@ defmodule Atomic.ProjectManagementTest do
                })
     end
 
+    test "update task fails when timer running and time is changed", %{user: user} do
+      task =
+        insert(:running_task, content: "Initial Content", time_sec: 120, created_by_user: user)
+
+      new_content = Faker.Lorem.sentence(6)
+      new_time = 124
+
+      assert {:error, changeset} =
+               ProjectManagement.update_task(user, task.id, %{
+                 content: new_content,
+                 time_sec: new_time
+               })
+
+      assert %{time_sec: ["cannot update time on a running task timer"]} =
+               changeset_errors(changeset)
+    end
+
     test "start task timer works", %{user: user} do
       task = insert(:task, created_by_user: user, status: :stopped)
 
@@ -197,13 +214,13 @@ defmodule Atomic.ProjectManagementTest do
     end
 
     test "cannot start a started task", %{user: user} do
-      task = insert(:started_task, created_by_user: user)
+      task = insert(:running_task, created_by_user: user)
 
       assert {:error, _cs} = ProjectManagement.start_task_timer(user, task.id)
     end
 
     test "stop task timer works", %{user: user} do
-      task = insert(:started_task, created_by_user: user)
+      task = insert(:running_task, created_by_user: user)
 
       assert {:ok, task} = ProjectManagement.stop_task_timer(user, task.id)
       assert task.time_sec > 0
