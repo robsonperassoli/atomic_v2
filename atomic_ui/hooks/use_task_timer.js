@@ -19,6 +19,11 @@ const useTaskTimer = ({ status, timeSec, startedAt }) => {
     return () => timerRef.current && clearInterval(timerRef.current)
   }, [status])
 
+  useEffect(() => {
+    // when timeSec is updated manually
+    setTime(timeSec)
+  }, [timeSec])
+
   return time
 }
 

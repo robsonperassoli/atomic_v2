@@ -5,7 +5,7 @@ import WeekdaySelector from './weekday_selector'
 import EmptyTaskList from './empty_task_list'
 import { useMemo } from 'react'
 
-const TaskList = ({ tasks = [], date, onDateChanged }) => {
+const TaskList = ({ tasks = [], date, onDateChanged, onEditTask }) => {
   const totalDailyTime = useMemo(
     () => tasks.reduce((totalTime, task) => totalTime + task.timeSec, 0),
     [tasks]
@@ -26,6 +26,7 @@ const TaskList = ({ tasks = [], date, onDateChanged }) => {
                 key={task.id}
                 {...task}
                 className={i > 0 ? 'border-t border-violet-300' : null}
+                onEdit={() => onEditTask(task)}
               />
             ))}
           </ul>

@@ -60,6 +60,18 @@ const TaskStatusText = ({ lastStoppedAt, lastStartedAt }) => {
   )
 }
 
+const EditButton = (props) => {
+  return (
+    <button
+      {...props}
+      type="button"
+      className="appearance-none focus:outline-none hover:bg-slate-50 text-violet-600 text-sm h-6 w-6 rounded-full"
+    >
+      <i className="fas fa-pencil" />
+    </button>
+  )
+}
+
 const Task = ({
   id,
   content,
@@ -68,6 +80,7 @@ const Task = ({
   lastStartedAt,
   lastStoppedAt,
   className = '',
+  onEdit,
 }) => {
   const [stopTimer] = useMutation(STOP_TIMER_MUTATION)
   const [startTimer] = useMutation(START_TIMER_MUTATION)
@@ -83,7 +96,7 @@ const Task = ({
     >
       <div className="max-w-3xl">
         <p className="text-sm tracking-wide text-slate-700 font-medium">
-          {content}
+          {content} <EditButton onClick={onEdit} />
         </p>
 
         <TaskStatusText
