@@ -33,4 +33,11 @@ defmodule AtomicWeb.UserAuth do
   def post_auth_redirect_url() do
     Application.get_env(:atomic, :frontend_app)[:auth_redirect_url]
   end
+
+  def cookie() do
+    %{
+      opts: @cookie_options,
+      key: @cookie_key
+    }
+  end
 end

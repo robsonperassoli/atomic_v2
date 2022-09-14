@@ -21,10 +21,16 @@ defmodule AtomicWeb.Router do
   end
 
   scope "/auth", AtomicWeb do
-    pipe_through [:browser, :redirect_if_user_is_authenticated, :auth]
+    pipe_through :browser
 
-    get "/:provider", AuthController, :request
-    get "/:provider/callback", AuthController, :callback
+    get "/logout", AuthController, :logout
+
+    scope "/" do
+      pipe_through [:redirect_if_user_is_authenticated, :auth]
+
+      get "/:provider", AuthController, :request
+      get "/:provider/callback", AuthController, :callback
+    end
   end
 
   scope "/api", AtomicWeb do
