@@ -1,6 +1,6 @@
-import CreateTaskButton from './create_task_button'
 import ProjectSelector from './project_selector'
 import WeekSelector from './week_selector'
+import PlusButton from '../../plus_button'
 
 const ControlBar = ({
   selectedProject,
@@ -15,7 +15,9 @@ const ControlBar = ({
     <section className="flex items-end justify-start gap-4 mt-4">
       <WeekSelector date={selectedDate} onChange={onDateChanged} />
 
-      <CreateTaskButton onClick={onCreateTask} />
+      <PlusButton onClick={onCreateTask} className="w-44">
+        Create task
+      </PlusButton>
 
       <div className="flex-grow" />
 

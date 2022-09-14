@@ -9,6 +9,7 @@ import CreateTaskModal from '../components/projects/create_task_modal'
 import Layout from '../components/layout'
 import UpdateTaskModal from '../components/projects/update_task_modal'
 import useModal from '../hooks/use_modal'
+import ZeroState from '../components/pages/index/zero_state'
 
 const PROJECTS_QUERY = gql`
   query ProjectsSelectorQuery {
@@ -115,21 +116,30 @@ const Home = () => {
 
   return (
     <>
-      <ControlBar
-        selectedProject={selectedProject}
-        projects={projects}
-        onProjectSelected={(p) => setSelectedProjectId(p.id)}
-        onCreateProject={() => modal.open(MODALS.CREATE_PROJECT)}
-        onCreateTask={() => modal.open(MODALS.CREATE_TASK)}
-        selectedDate={selectedDate}
-        onDateChanged={setSelectedDate}
-      />
-      <TaskList
-        date={selectedDate}
-        onDateChanged={setSelectedDate}
-        tasks={tasks}
-        onEditTask={(task) => modal.open(MODALS.UPDATE_TASK, { task })}
-      />
+      {projects?.length > 0 ? (
+        <>
+          <ControlBar
+            selectedProject={selectedProject}
+            projects={projects}
+            onProjectSelected={(p) => setSelectedProjectId(p.id)}
+            onCreateProject={() => modal.open(MODALS.CREATE_PROJECT)}
+            onCreateTask={() => modal.open(MODALS.CREATE_TASK)}
+            selectedDate={selectedDate}
+            onDateChanged={setSelectedDate}
+          />
+          <TaskList
+            date={selectedDate}
+            onDateChanged={setSelectedDate}
+            tasks={tasks}
+            onEditTask={(task) => modal.open(MODALS.UPDATE_TASK, { task })}
+          />
+        </>
+      ) : (
+        <ZeroState
+          onCreateProjectClick={() => modal.open(MODALS.CREATE_PROJECT)}
+        />
+      )}
+
       <CreateProjectModal
         isOpen={modal.isOpen(MODALS.CREATE_PROJECT)}
         onClose={modal.close}
