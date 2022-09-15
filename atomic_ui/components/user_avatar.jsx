@@ -9,7 +9,7 @@ const avatars = [
   '6.png',
   '7.jpeg',
   '8.png',
-  '9.webp',
+  '9.png',
   '10.png',
 ]
 
