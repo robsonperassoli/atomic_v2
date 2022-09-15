@@ -6,7 +6,7 @@ import {
 } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
 
-import { API_URL } from './config'
+import { GRAPHQL_URL } from './config'
 
 const errorLink = onError(
   ({ graphQLErrors, networkError, operation, forward }) => {
@@ -28,7 +28,7 @@ const errorLink = onError(
 )
 
 const httpLink = createHttpLink({
-  uri: API_URL,
+  uri: GRAPHQL_URL,
   credentials: 'include',
 })
 
