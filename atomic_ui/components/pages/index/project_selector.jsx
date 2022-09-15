@@ -44,7 +44,7 @@ const ProjectSelector = ({
         </span>
       </Menu.Button>
 
-      <Menu.Items className="absolute right-0 bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm mt-1 min-w-[15rem]">
+      <Menu.Items className="absolute right-0 z-10 bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm mt-1 w-full sm:w-auto min-w-[15rem]">
         {projectsOptions?.length > 0 && (
           <>
             {projectsOptions.map((p) => (
