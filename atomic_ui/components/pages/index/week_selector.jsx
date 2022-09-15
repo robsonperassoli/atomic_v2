@@ -22,12 +22,12 @@ const WeekSelector = ({ date, onChange }) => {
   return (
     <Popover className="relative">
       <Popover.Button className="appearance-none focus:outline-none border-b border-slate-300  tracking-wide inline-flex flex-col pb-1 px-1">
-        <span className="text-slate-400 text-sm pb-1">Week</span>
+        <span className="text-slate-400 text-xs sm:text-sm pb-1">Week</span>
         <span className="flex items-center gap-2">
-          <span className="font-semibold text-slate-800 tracking-wide">
+          <span className="font-medium sm:font-semibold text-slate-800 tracking-normal sm:tracking-wide text-sm sm:text-base">
             {weekLabel}
           </span>
-          <i className="fas fa-chevron-down text-slate-400" />
+          <i className="fas fa-chevron-down text-slate-400 text-sm sm:text-base" />
         </span>
       </Popover.Button>
 

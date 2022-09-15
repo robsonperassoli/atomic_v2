@@ -52,7 +52,7 @@ const TaskStatusText = ({ lastStoppedAt, lastStartedAt }) => {
 
   return (
     <span
-      className="text-slate-500 text-xs font-medium italic leading-2 block pt-1"
+      className="text-slate-500 text-xs font-medium italic leading-2 hidden sm:block pt-1"
       title={DateTime.fromISO(lastStoppedAt || lastStartedAt).toFormat('FF')}
     >
       {text}
@@ -90,7 +90,7 @@ const Task = ({
   return (
     <li
       className={classNames(
-        'flex items-center justify-between py-4',
+        'flex flex-col sm:flex-row items-center justify-between py-2 sm:py-4',
         className
       )}
     >
@@ -109,7 +109,7 @@ const Task = ({
         <TaskTime
           timeInSec={timeInSec}
           active={status === TASK_STATUSES.RUNNING}
-          className="mr-4"
+          className="mr-2 sm:mr-4 mt-4 sm:mt-0"
         />
         {status === TASK_STATUSES.RUNNING && (
           <ActionButton

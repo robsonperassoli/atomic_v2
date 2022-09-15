@@ -34,13 +34,13 @@ const ProjectSelector = ({
 
   return (
     <Menu as="div" className={classNames('relative', className)}>
-      <Menu.Button className="appearance-none focus:outline-none border-b border-slate-300  tracking-wide inline-flex flex-col pb-1 px-1 min-w-[10rem]">
-        <span className="text-slate-400 text-sm pb-1">Project</span>
+      <Menu.Button className="appearance-none focus:outline-none border-b border-slate-300 tracking-wide inline-flex flex-col pb-1 px-1 min-w-[15rem] w-full">
+        <span className="text-slate-400 text-xs sm:text-sm pb-1">Project</span>
         <span className="flex items-center gap-2 w-full">
-          <span className="font-semibold text-slate-800 tracking-wide flex-grow text-left">
+          <span className="font-medium sm:font-semibold text-slate-800 tracking-normal sm:tracking-wide text-sm sm:text-base flex-grow text-left">
             {selected?.name}
           </span>
-          <i className="fas fa-chevron-down text-slate-400" />
+          <i className="fas fa-chevron-down text-slate-400 text-sm sm:text-base" />
         </span>
       </Menu.Button>
 

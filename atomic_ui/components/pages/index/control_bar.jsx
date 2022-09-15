@@ -12,21 +12,21 @@ const ControlBar = ({
   onCreateTask,
 }) => {
   return (
-    <section className="flex items-end justify-start gap-4 mt-4">
-      <WeekSelector date={selectedDate} onChange={onDateChanged} />
+    <section className="flex flex-col sm:flex-row items-end justify-start gap-4 mt-4">
+      <div className="w-full sm:w-auto flex-grow flex gap-4 justify-between sm:justify-start">
+        <WeekSelector date={selectedDate} onChange={onDateChanged} />
 
-      <PlusButton onClick={onCreateTask} className="w-44">
-        Create task
-      </PlusButton>
-
-      <div className="flex-grow" />
+        <PlusButton onClick={onCreateTask} className="w-44 self-end">
+          Create task
+        </PlusButton>
+      </div>
 
       <ProjectSelector
         selected={selectedProject}
         projects={projects}
         onChange={onProjectSelected}
         onCreate={onCreateProject}
-        className="justify-self-end"
+        className="flex-grow flex-grow-0 w-full sm:w-auto justify-self-end"
       />
     </section>
   )

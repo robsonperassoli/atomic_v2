@@ -20,7 +20,7 @@ const TaskList = ({ tasks = [], date, onDateChanged, onEditTask }) => {
       />
       {tasks.length > 0 ? (
         <>
-          <ul className="px-4">
+          <ul className="sm:px-4">
             {tasks.map((task, i) => (
               <Task
                 key={task.id}

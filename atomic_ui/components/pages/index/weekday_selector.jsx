@@ -31,21 +31,24 @@ const WeekdaySelector = ({ className, value, onChange }) => {
           )}
         >
           <button
-            className="flex justify-between items-center h-full w-full p-4"
+            className="flex justify-between items-center h-full w-full p-2 md:p-4 relative"
             disabled={d.toISODate() === value}
             onClick={() => onChange(d.toISODate())}
           >
-            <span className="flex flex-col items-start">
-              <span className="font-black text-black text-xl tracking-widest">
+            <span className="flex flex-col items-center sm:items-start w-full">
+              <span className="font-black text-black text-base sm:text-lg md:text-xl tracking-wider sm:tracking-widest">
                 {d.weekdayShort}
               </span>
-              <span className="text-slate-500 text-sm font-semibold">
-                {d.monthShort}, {d.day}
+              <span className="text-slate-500 text-xs sm:text-sm font-semibold">
+                <span className="hidden sm:inline">
+                  {d.monthShort}, {d.day}
+                </span>
+                <span className="inline sm:hidden">{d.toFormat('L/d')}</span>
               </span>
             </span>
 
             {today === d.toISODate() && (
-              <i className="fas fa-asterisk text-amber-600 text-3xl" />
+              <i className="fas fa-asterisk text-amber-600 text-sm m:text-lg lg:text-3xl absolute sm:relative top-0.5 right-0.5" />
             )}
           </button>
         </li>

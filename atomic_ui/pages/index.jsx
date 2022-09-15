@@ -114,6 +114,10 @@ const Home = () => {
 
   const onTaskUpdated = (_task) => modal.close()
 
+  if (loading) {
+    return null
+  }
+
   return (
     <>
       {projects?.length > 0 ? (

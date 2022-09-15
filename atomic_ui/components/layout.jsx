@@ -4,7 +4,8 @@ const Layout = ({ children }) => {
   return (
     <div className="min-h-screen bg-gray-100">
       <Topbar />
-      <main className="container mx-auto">{children}</main>
+
+      <main className="container mx-auto px-4 ms:px-0">{children}</main>
     </div>
   )
 }

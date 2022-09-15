@@ -12,7 +12,7 @@ const UserMenu = () => {
       <Menu.Button className="flex items-center h-full px-2 gap-2 text-white hover:bg-gray-800 hover:bg-opacity-25 transition-colors duration-200">
         <UserAvatar userId={loggedInUser?.id} />
 
-        <span className="text-lg medium tracking-wide">
+        <span className="text-lg medium tracking-wide hidden sm:inline-block">
           {loggedInUser?.name}
         </span>
         <i className="fas fa-chevron-down text-xl" />
