@@ -30,4 +30,10 @@ defmodule AtomicWeb.Schema.Types do
     value :running
     value :stopped
   end
+
+  object :user do
+    field :id, :id
+    field :name, :string
+    field :email, :string
+  end
 end

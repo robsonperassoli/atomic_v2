@@ -19,6 +19,12 @@ defmodule AtomicWeb.Schema do
   end
 
   query do
+    field :me, :user do
+      middleware AtomicWeb.Schema.AuthenticationMiddleware
+
+      resolve &AtomicWeb.Schema.Resolvers.me/3
+    end
+
     field :project, :project do
       arg :id, :id
       middleware AtomicWeb.Schema.AuthenticationMiddleware
