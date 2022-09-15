@@ -1,22 +1,20 @@
-import Image from 'next/image'
 import { Menu } from '@headlessui/react'
 import { LOGOUT_URL } from '../../config'
 import classNames from 'classnames'
+import useCurrentUser from '../../hooks/use_current_user'
+import UserAvatar from '../user_avatar'
 
 const UserMenu = () => {
+  const loggedInUser = useCurrentUser()
+
   return (
     <Menu as="div" className="relative self-stretch mr-2">
       <Menu.Button className="flex items-center h-full px-2 gap-2 text-white hover:bg-gray-800 hover:bg-opacity-25 transition-colors duration-200">
-        <figure className="rounded-full overflow-hidden flex">
-          <Image
-            src="/images/cat.svg"
-            width={50}
-            height={50}
-            alt="user profile picture"
-          />
-        </figure>
+        <UserAvatar userId={loggedInUser?.id} />
 
-        <span className="text-lg medium tracking-wide">Robson Perassoli</span>
+        <span className="text-lg medium tracking-wide">
+          {loggedInUser?.name}
+        </span>
         <i className="fas fa-chevron-down text-xl" />
       </Menu.Button>
       <Menu.Items className="absolute right-2 origin-top-right mt-1 w-56 rounded-lg bg-white shadow-lg z-10 overflow-hidden">
