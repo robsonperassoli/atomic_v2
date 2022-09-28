@@ -1,4 +1,7 @@
 defmodule AtomicWeb.Schema.Types do
+  @moduledoc """
+  Type definitions for the GraphQL api
+  """
   use Absinthe.Schema.Notation
   import Absinthe.Resolution.Helpers, only: [dataloader: 1]
   alias Atomic.ProjectManagement

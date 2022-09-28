@@ -1,4 +1,7 @@
 defmodule Atomic.ProjectManagement.Task do
+  @moduledoc """
+  Task Ecto Schema
+  """
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query

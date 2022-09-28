@@ -1,4 +1,6 @@
 defmodule Atomic.ProjectManagement.Permission do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
 

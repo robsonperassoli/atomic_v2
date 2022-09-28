@@ -1,4 +1,9 @@
 defmodule AtomicWeb.Schema do
+  @moduledoc """
+  Definition of the absinthe graphql schema.
+
+  This is the starting point for the graphql api definition
+  """
   use Absinthe.Schema
 
   alias Atomic.ProjectManagement

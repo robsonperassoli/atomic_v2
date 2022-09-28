@@ -1,4 +1,10 @@
 defmodule AtomicWeb.Schema.Context do
+  @moduledoc """
+  Context used to include custom data into the absinthe context.
+
+  The context resides in the graph resolution and is used by the resolvers and middleware.
+  """
+
   @behaviour Plug
 
   def init(opts), do: opts

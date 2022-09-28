@@ -1,4 +1,7 @@
 defmodule Atomic.TestHelpers do
+  @moduledoc """
+  Miscelaneous test helpers
+  """
   def changeset_errors(changeset) do
     Ecto.Changeset.traverse_errors(changeset, fn {msg, opts} ->
       Regex.replace(~r"%{(\w+)}", msg, fn _, key ->

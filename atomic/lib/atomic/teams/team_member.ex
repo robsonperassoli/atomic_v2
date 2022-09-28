@@ -1,4 +1,6 @@
 defmodule Atomic.Teams.TeamMember do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
 

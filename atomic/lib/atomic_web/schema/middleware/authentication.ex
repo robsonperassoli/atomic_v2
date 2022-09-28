@@ -1,4 +1,7 @@
 defmodule AtomicWeb.Schema.AuthenticationMiddleware do
+  @moduledoc """
+  Authentication middleware for the GraphQL API.
+  """
   @behaviour Absinthe.Middleware
 
   def call(resolution, _config) do

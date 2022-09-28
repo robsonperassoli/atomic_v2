@@ -1,4 +1,8 @@
 defmodule AtomicWeb.UserAuth do
+  @moduledoc """
+  Authentication helper functions used by the AuthController
+  """
+
   import Plug.Conn
   import Phoenix.Controller
 

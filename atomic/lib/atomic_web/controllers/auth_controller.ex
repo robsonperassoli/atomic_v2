@@ -27,7 +27,6 @@ defmodule AtomicWeb.AuthController do
   def logout(conn, _params) do
     conn
     |> delete_resp_cookie(UserAuth.cookie().key, UserAuth.cookie().opts)
-    |> IO.inspect()
     |> redirect(external: UserAuth.post_auth_redirect_url())
   end
 end

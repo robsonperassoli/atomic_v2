@@ -1,4 +1,6 @@
 defmodule Atomic.Accounts.User do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
   alias Atomic.Accounts.{User, Identity}

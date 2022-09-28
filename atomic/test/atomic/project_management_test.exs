@@ -178,7 +178,7 @@ defmodule Atomic.ProjectManagementTest do
     test "update task respects ownership", %{user: user} do
       malicious_user = insert(:user)
 
-      task = insert(:task, content: "content", time_sec: 11111, created_by_user: user)
+      task = insert(:task, content: "content", time_sec: 11_111, created_by_user: user)
 
       assert {:error, :task_not_found} =
                ProjectManagement.update_task(malicious_user, task.id, %{

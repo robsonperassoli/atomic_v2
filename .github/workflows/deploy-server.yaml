@@ -53,6 +53,7 @@ jobs:
           restore-keys: ${{ runner.os }}-mix-
 
       - run: "mix deps.get"
+      - run: "mix credo"
       - run: "mix ecto.create"
       - run: "mix ecto.migrate"
       - run: "mix test"

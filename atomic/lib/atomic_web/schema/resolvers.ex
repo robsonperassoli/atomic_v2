@@ -1,4 +1,7 @@
 defmodule AtomicWeb.Schema.Resolvers do
+  @moduledoc """
+    Absinthe resolvers for the GraphQL api
+  """
   alias Atomic.ProjectManagement
 
   ################# QUERIES #####################
