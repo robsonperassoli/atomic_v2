@@ -14,6 +14,9 @@ config :atomic, AtomicWeb.Endpoint, cache_static_manifest: "priv/static/cache_ma
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :pdf_generator,
+  wkhtml_path: "/usr/bin/wkhtmltopdf"
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

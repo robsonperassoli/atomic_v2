@@ -116,8 +116,7 @@ defmodule Atomic.ProjectManagement do
          start_time: start_time,
          end_time: end_time
        }) do
-    Task.by_user_query(current_user.id)
-    |> Task.created_in_interval(start_time, end_time)
+    Task.by_user_at_period(current_user.id, start_time, end_time)
   end
 
   defp query(queryable, _params), do: queryable

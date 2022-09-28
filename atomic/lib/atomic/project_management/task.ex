@@ -130,4 +130,9 @@ defmodule Atomic.ProjectManagement.Task do
     from t in query,
       where: t.inserted_at >= ^start_time and t.inserted_at <= ^end_time
   end
+
+  def by_user_at_period(user_id, start_time, end_time) do
+    by_user_query(user_id)
+    |> created_in_interval(start_time, end_time)
+  end
 end
