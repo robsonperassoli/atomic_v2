@@ -36,9 +36,13 @@ jobs:
         working-directory: "./atomic"
 
     steps:
-      - run: "sudo apt-get install xvfb libfontconfig wkhtmltopdf"
       - name: "Checkout"
         uses: "actions/checkout@v3"
+
+      - name: Install wkhtmltopdf
+        run: |
+          sudo apt-get install -y xvfb libfontconfig wkhtmltopdf
+          which wkhtmltopdf
 
       - name: "Setup Elixir"
         uses: "erlef/setup-beam@v1.12.0"

@@ -29,9 +29,9 @@ defmodule Atomic.Reports.Templates.Tasks do
     """
     <table style="width: 100%; border-collapse: collapse;">
       <tr>
-        <th style="text-align: right;background-color: #b9babb; padding: 10px 5px">#</th>
-        <th style="text-align: left;background-color: #b9babb;">Content</th>
-        <th style="text-align: right;background-color: #b9babb; padding: 10px 5px">Duration</th>
+        <th style="text-align: right; background-color: #b9babb; padding: 10px 5px">#</th>
+        <th style="text-align: left; background-color: #b9babb;">Content</th>
+        <th style="text-align: right; background-color: #b9babb; padding: 10px 5px">Duration</th>
       </tr>
       #{task_rows(tasks, "")}
     </table>
