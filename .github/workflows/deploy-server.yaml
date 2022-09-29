@@ -36,6 +36,7 @@ jobs:
         working-directory: "./atomic"
 
     steps:
+      - run: "sudo apt-get install xvfb libfontconfig wkhtmltopdf"
       - name: "Checkout"
         uses: "actions/checkout@v3"
 
