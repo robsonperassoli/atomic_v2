@@ -29,14 +29,14 @@ defmodule Atomic.Reports.TasksTest do
         inserted_at: beginning_of_past_week
       })
 
-      assert {:ok, data} = Tasks.prepare_data(%{period: :week, user: user})
+      assert {:ok, data} = Tasks.prepare_data(%{period: :week, user_id: user.id})
       assert length(data) == 3
     end
 
     test "returns the correct tasks for the monthly period", %{user: user} do
       beginning_of_this_month =
         Timex.now()
-        |> Timex.beginning_of_week()
+        |> Timex.beginning_of_month()
 
       beginning_of_past_month =
         beginning_of_this_month
@@ -52,7 +52,7 @@ defmodule Atomic.Reports.TasksTest do
         inserted_at: beginning_of_past_month
       })
 
-      assert {:ok, data} = Tasks.prepare_data(%{period: :month, user: user})
+      assert {:ok, data} = Tasks.prepare_data(%{period: :month, user_id: user.id})
       assert length(data) == 3
     end
 
@@ -78,7 +78,7 @@ defmodule Atomic.Reports.TasksTest do
       assert {:ok, data} =
                Tasks.prepare_data(%{
                  period: :custom,
-                 user: user,
+                 user_id: user.id,
                  start_time: beginning_of_period,
                  end_time: Timex.shift(beginning_of_period, days: 4)
                })
@@ -88,11 +88,14 @@ defmodule Atomic.Reports.TasksTest do
   end
 
   describe "generate/1" do
-    test "generates a binary pdf" do
-      tasks = insert_list(3, :task)
+    test "generates the html to be converted" do
+      [t1, t2, t3] = tasks = insert_list(3, :task)
 
-      {:ok, pdf} = Tasks.generate(%{params: %{}, data: tasks})
-      assert is_binary(pdf)
+      assert {:ok, html} = Tasks.generate(%{params: %{}, data: tasks})
+      assert is_binary(html)
+      assert html =~ t1.content
+      assert html =~ t2.content
+      assert html =~ t3.content
     end
   end
 end

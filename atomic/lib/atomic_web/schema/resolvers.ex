@@ -83,12 +83,19 @@ defmodule AtomicWeb.Schema.Resolvers do
     |> put_user_id(resolution)
     |> then(&Atomic.Reports.spawn_builder_task(:tasks, &1))
     |> case do
-      {:ok, _pid} ->
-        {:ok, true}
+      {:ok, report_id} ->
+        {:ok, report_id}
 
       {:error, _reason} ->
         {:error, "Report creation failed"}
     end
+  end
+
+  def create_websocket_token(_root, _args, resolution) do
+    resolution
+    |> get_current_user()
+    |> AtomicWeb.UserAuth.create_websocket_token()
+    |> then(&{:ok, &1})
   end
 
   defp get_current_user(%{context: %{current_user: current_user}} = _resolution), do: current_user

@@ -12,6 +12,7 @@ defmodule Atomic.Application do
       AtomicWeb.Telemetry,
       {Phoenix.PubSub, name: Atomic.PubSub},
       AtomicWeb.Endpoint,
+      {Absinthe.Subscription, AtomicWeb.Endpoint},
       {Task.Supervisor, name: Atomic.Reports.Supervisor, max_children: 20}
     ]
 

@@ -7,7 +7,8 @@ defmodule Atomic.ReportsTest do
 
   describe "build/2" do
     test "works" do
-      {:ok, "1,2,3"} = Reports.build(:test, %{p1: 1, p2: 2})
+      assert {:ok, pdf_file} = Reports.build(:test, %{p1: 1, p2: 2})
+      assert File.exists?(pdf_file)
     end
   end
 end

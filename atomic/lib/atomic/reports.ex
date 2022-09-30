@@ -20,8 +20,10 @@ defmodule Atomic.Reports do
     end
   end
 
-  def upload(local_pdf_path) do
-    storage_path = "#{Ecto.UUID.generate()}.pdf"
+  def upload(local_pdf_path), do: upload(local_pdf_path, report_id())
+
+  def upload(local_pdf_path, report_id) do
+    storage_path = "#{report_id}.pdf"
 
     Storage.upload(@upload_bucket, local_pdf_path, storage_path)
     |> case do
@@ -36,28 +38,39 @@ defmodule Atomic.Reports do
   end
 
   def build_and_upload(report, params) do
-    with {:ok, local_pdf_file} <- build(report, params),
-         {:ok, report_url} <- upload(local_pdf_file) do
-      {:ok, report_url}
+    report
+    |> build(params)
+    |> case do
+      {:ok, local_pdf_file} ->
+        upload(local_pdf_file, params[:report_id])
+
+      e ->
+        e
     end
   end
 
   def spawn_builder_task(report, params) do
+    report_id = report_id()
+
     Task.Supervisor.start_child(Atomic.Reports.Supervisor, fn ->
       report
-      |> Atomic.Reports.build_and_upload(params)
+      |> Atomic.Reports.build_and_upload(Map.put(params, :report_id, report_id))
       |> case do
         {:ok, report_url} ->
-          report_url
+          :timer.sleep(10_000)
+
+          Absinthe.Subscription.publish(AtomicWeb.Endpoint, report_url, report_ready: report_id)
 
         e ->
           Logger.error(
             "[Atomic.Reports.Worker] #{report} report failed with params: #{inspect(params)}. Error details: #{inspect(e)}"
           )
-
-          e
       end
     end)
+    |> case do
+      {:ok, _pid} -> {:ok, report_id}
+      e -> e
+    end
   end
 
   defp find_report_spec(:tasks, _params), do: Atomic.Reports.Tasks
@@ -66,4 +79,6 @@ defmodule Atomic.Reports do
 
   defp to_pdf({:ok, html_content}), do: PdfGenerator.generate(html_content, page_size: "A4")
   defp to_pdf(e), do: e
+
+  defp report_id(), do: Ecto.UUID.generate()
 end

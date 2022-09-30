@@ -50,7 +50,8 @@ defmodule AtomicWeb.Router do
       forward "/",
               Absinthe.Plug.GraphiQL,
               schema: AtomicWeb.Schema,
-              interface: :playground
+              interface: :playground,
+              socket: AtomicWeb.Socket
     end
   end
 

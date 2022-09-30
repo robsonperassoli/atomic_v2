@@ -123,13 +123,29 @@ defmodule AtomicWeb.Schema do
       resolve &AtomicWeb.Schema.Resolvers.update_task/3
     end
 
-    field :create_tasks_report, :boolean do
+    field :create_tasks_report, :string do
       arg :period, non_null(:tasks_report_period)
       arg :start_time, :datetime
       arg :end_time, :datetime
 
       middleware AtomicWeb.Schema.AuthenticationMiddleware
       resolve &AtomicWeb.Schema.Resolvers.create_tasks_report/3
+    end
+
+    field :create_websocket_token, :string do
+      middleware AtomicWeb.Schema.AuthenticationMiddleware
+
+      resolve &AtomicWeb.Schema.Resolvers.create_websocket_token/3
+    end
+  end
+
+  subscription do
+    field :report_ready, :string do
+      arg :report_id, :string
+
+      config fn args, _ ->
+        {:ok, topic: args.report_id}
+      end
     end
   end
 end

@@ -3,14 +3,19 @@ import {
   InMemoryCache,
   createHttpLink,
   from,
+  split,
 } from '@apollo/client'
+import { getMainDefinition } from '@apollo/client/utilities'
 import { onError } from '@apollo/client/link/error'
+import * as AbsintheSocket from '@absinthe/socket'
+import { createAbsintheSocketLink } from '@absinthe/socket-apollo-link'
+import { Socket as PhoenixSocket } from 'phoenix'
+import { GRAPHQL_URL, WS_URL } from './config'
 
-import { GRAPHQL_URL } from './config'
+const cache = new InMemoryCache()
 
 const errorLink = onError(
   ({ graphQLErrors, networkError, operation, forward }) => {
-    console.log(graphQLErrors)
     if (graphQLErrors) {
       graphQLErrors.forEach(({ message, code, locations, path }) => {
         switch (code) {
@@ -32,7 +37,35 @@ const httpLink = createHttpLink({
   credentials: 'include',
 })
 
-export const apolloClient = new ApolloClient({
-  link: from([errorLink, httpLink]),
-  cache: new InMemoryCache(),
-})
+const createClient = (httpWsLink) => {
+  return new ApolloClient({
+    link: from([errorLink, httpWsLink]),
+    cache,
+  })
+}
+
+export const createWsAndHttpLink = (token) => {
+  const socket = new PhoenixSocket(WS_URL, {
+    params: { token },
+  })
+
+  const absintheSocket = AbsintheSocket.create(socket)
+  const wsLink = createAbsintheSocketLink(absintheSocket)
+
+  socket.connect()
+
+  return split(
+    ({ query }) => {
+      const definition = getMainDefinition(query)
+
+      return (
+        definition.kind === 'OperationDefinition' &&
+        definition.operation === 'subscription'
+      )
+    },
+    wsLink,
+    httpLink
+  )
+}
+
+export const createHttpClient = () => createClient(httpLink)

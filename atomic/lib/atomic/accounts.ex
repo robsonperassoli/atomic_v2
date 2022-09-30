@@ -38,6 +38,29 @@ defmodule Atomic.Accounts do
   def get_user!(id), do: Repo.get!(User, id)
 
   @doc """
+  Gets a single user.
+
+  Returns {:error, :not_found} if the User does not exist.
+
+  ## Examples
+
+      iex> get_user(123)
+      {:ok, %User{}}
+
+      iex> get_user(456)
+      {:error, :not_found}
+
+  """
+  def get_user(id) do
+    User
+    |> Repo.get(id)
+    |> case do
+      nil -> {:error, :not_found}
+      user -> {:ok, user}
+    end
+  end
+
+  @doc """
   Creates a user.
 
   ## Examples

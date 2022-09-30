@@ -9,7 +9,7 @@ processes = []
   release_command = "/app/bin/migrate"
 
 [env]
-  PHX_HOST = "atomic2.fly.dev"
+  PHX_HOST = "api.atomic.robsonperassoli.com.br"
   PORT = "8080"
 
 [experimental]

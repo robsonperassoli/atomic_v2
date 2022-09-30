@@ -7,10 +7,12 @@ defmodule AtomicWeb.UserAuth do
   import Phoenix.Controller
 
   alias Atomic.Accounts
+  alias Atomic.Accounts.User
 
   @max_age 60 * 60 * 24 * 60
   @cookie_key "user_token"
   @cookie_options [sign: true, max_age: @max_age]
+  @websocket_token_salt "user websocket"
 
   def fetch_current_user(conn, _opts) do
     conn = fetch_cookies(conn, signed: [@cookie_key])
@@ -31,6 +33,22 @@ defmodule AtomicWeb.UserAuth do
         conn
         |> redirect(external: post_auth_redirect_url())
         |> halt()
+    end
+  end
+
+  def create_websocket_token(%User{id: user_id}) do
+    Phoenix.Token.sign(AtomicWeb.Endpoint, @websocket_token_salt, to_string(user_id))
+  end
+
+  def auth_websocket_token(token) do
+    AtomicWeb.Endpoint
+    |> Phoenix.Token.verify(@websocket_token_salt, token)
+    |> case do
+      {:ok, user_id} ->
+        Accounts.get_user(user_id)
+
+      e ->
+        e
     end
   end
 
