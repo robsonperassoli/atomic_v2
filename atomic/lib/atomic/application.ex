@@ -8,16 +8,11 @@ defmodule Atomic.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      # Start the Ecto repository
       Atomic.Repo,
-      # Start the Telemetry supervisor
       AtomicWeb.Telemetry,
-      # Start the PubSub system
       {Phoenix.PubSub, name: Atomic.PubSub},
-      # Start the Endpoint (http/https)
-      AtomicWeb.Endpoint
-      # Start a worker by calling: Atomic.Worker.start_link(arg)
-      # {Atomic.Worker, arg}
+      AtomicWeb.Endpoint,
+      {Task.Supervisor, name: Atomic.Reports.Supervisor, max_children: 20}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

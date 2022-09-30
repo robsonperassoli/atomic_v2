@@ -39,4 +39,10 @@ defmodule AtomicWeb.Schema.Types do
     field :name, :string
     field :email, :string
   end
+
+  enum :tasks_report_period do
+    value :week
+    value :month
+    value :custom
+  end
 end

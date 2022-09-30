@@ -122,5 +122,14 @@ defmodule AtomicWeb.Schema do
 
       resolve &AtomicWeb.Schema.Resolvers.update_task/3
     end
+
+    field :create_tasks_report, :boolean do
+      arg :period, non_null(:tasks_report_period)
+      arg :start_time, :datetime
+      arg :end_time, :datetime
+
+      middleware AtomicWeb.Schema.AuthenticationMiddleware
+      resolve &AtomicWeb.Schema.Resolvers.create_tasks_report/3
+    end
   end
 end

@@ -78,5 +78,24 @@ defmodule AtomicWeb.Schema.Resolvers do
     ProjectManagement.update_task(user, id, Map.delete(args, :id))
   end
 
+  def create_tasks_report(_root, args, resolution) do
+    args
+    |> put_user_id(resolution)
+    |> then(&Atomic.Reports.spawn_builder_task(:tasks, &1))
+    |> case do
+      {:ok, _pid} ->
+        {:ok, true}
+
+      {:error, _reason} ->
+        {:error, "Report creation failed"}
+    end
+  end
+
   defp get_current_user(%{context: %{current_user: current_user}} = _resolution), do: current_user
+
+  defp put_user_id(map, resolution) when is_map(map) do
+    resolution
+    |> get_current_user()
+    |> then(&Map.put(map, :user_id, &1.id))
+  end
 end
