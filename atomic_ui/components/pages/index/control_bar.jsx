@@ -26,7 +26,7 @@ const ControlBar = ({
         projects={projects}
         onChange={onProjectSelected}
         onCreate={onCreateProject}
-        className="flex-grow flex-grow-0 w-full sm:w-auto justify-self-end"
+        className="flex-grow-0 w-full sm:w-auto justify-self-end"
       />
     </section>
   )

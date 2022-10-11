@@ -36,7 +36,6 @@ const useApolloClientCreator = (connectWebsocket = false) => {
   }, [apolloClientRef])
 
   useEffect(() => {
-    console.log('connectWebsocket', connectWebsocket)
     if (connectWebsocket) {
       createWebSocketLink()
     }

@@ -57,8 +57,6 @@ defmodule Atomic.Reports do
       |> Atomic.Reports.build_and_upload(Map.put(params, :report_id, report_id))
       |> case do
         {:ok, report_url} ->
-          :timer.sleep(10_000)
-
           Absinthe.Subscription.publish(AtomicWeb.Endpoint, report_url, report_ready: report_id)
 
         e ->

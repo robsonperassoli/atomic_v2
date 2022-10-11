@@ -2,7 +2,7 @@ import { gql, useQuery } from '@apollo/client'
 import useLocalStorage from '../hooks/use_local_storage'
 import ControlBar from '../components/pages/index/control_bar'
 import TaskList from '../components/pages/index/task_list'
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { DateTime } from 'luxon'
 import CreateProjectModal from '../components/projects/create_project_modal'
 import CreateTaskModal from '../components/projects/create_task_modal'
@@ -47,7 +47,7 @@ const MODALS = {
   UPDATE_TASK: 'UPDATE_TASK',
 }
 
-const Home = () => {
+const HomePage = () => {
   const modal = useModal()
   const [selectedProjectId, setSelectedProjectId] = useLocalStorage(
     'selectedProjectId',
@@ -167,6 +167,6 @@ const Home = () => {
   )
 }
 
-Home.getLayout = (page) => <Layout>{page}</Layout>
+HomePage.getLayout = (page) => <Layout>{page}</Layout>
 
-export default Home
+export default HomePage
