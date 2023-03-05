@@ -4,6 +4,7 @@ import { DateTime } from 'luxon'
 import useTaskTimer from '../../../hooks/use_task_timer'
 import { TASK_STATUSES } from '../../../tasks'
 import TaskTime from '../../task_time'
+import TaskStatusText from '../../task_status_text'
 
 const START_TIMER_MUTATION = gql`
   mutation StartTimer($taskId: ID!) {
@@ -38,27 +39,6 @@ const ActionButton = ({ stopped = false, ...props }) => (
     <i className={classNames('fas', stopped ? 'fa-play' : 'fa-stop')} />
   </button>
 )
-
-const toRelativeTime = (isoDateStr) => DateTime.fromISO(isoDateStr).toRelative()
-
-const TaskStatusText = ({ lastStoppedAt, lastStartedAt }) => {
-  if (!lastStoppedAt && !lastStartedAt) {
-    return null
-  }
-
-  const text = !!lastStoppedAt
-    ? `Stopped ${toRelativeTime(lastStoppedAt)}`
-    : `Started ${toRelativeTime(lastStartedAt)}`
-
-  return (
-    <span
-      className="text-slate-500 text-xs font-medium italic leading-2 hidden sm:block pt-1"
-      title={DateTime.fromISO(lastStoppedAt || lastStartedAt).toFormat('FF')}
-    >
-      {text}
-    </span>
-  )
-}
 
 const EditButton = (props) => {
   return (

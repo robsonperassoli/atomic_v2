@@ -1,15 +1,35 @@
 import { Dialog } from '@headlessui/react'
 import classNames from 'classnames'
+import { twMerge } from 'tailwind-merge'
 
-const Modal = ({ isOpen, onClose, className = '', children }) => {
+export const MODAL_POSITION = {
+  TOP: 'top',
+  MIDDLE: 'middle',
+}
+
+const Modal = ({
+  isOpen,
+  onClose,
+  className = '',
+  position = MODAL_POSITION.MIDDLE,
+  children,
+}) => {
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
       <div className="fixed inset-0 bg-black bg-opacity-25" />
 
       <div className="fixed inset-0 overflow-y-auto">
-        <div className="flex min-h-full items-center justify-center p-4 text-center">
+        <div
+          className={classNames(
+            'flex min-h-full justify-center p-4 text-center',
+            {
+              'items-center': position === MODAL_POSITION.MIDDLE,
+              'items-start': position === MODAL_POSITION.TOP,
+            }
+          )}
+        >
           <Dialog.Panel
-            className={classNames(
+            className={twMerge(
               'w-full transform overflow-hidden rounded-xl bg-white text-left align-middle shadow-xl transition-all',
               className
             )}
