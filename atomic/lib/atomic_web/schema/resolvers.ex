@@ -23,6 +23,14 @@ defmodule AtomicWeb.Schema.Resolvers do
     ProjectManagement.get_task(user, id)
   end
 
+  def tasks(_root, %{term: term}, resolution) do
+    user = get_current_user(resolution)
+
+    user
+    |> ProjectManagement.search_tasks(term)
+    |> then(&{:ok, &1})
+  end
+
   def me(_root, _args, resolution) do
     resolution
     |> get_current_user()

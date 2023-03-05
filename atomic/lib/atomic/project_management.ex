@@ -102,6 +102,18 @@ defmodule Atomic.ProjectManagement do
     end
   end
 
+  def search_tasks(%User{} = user, term) do
+    from(t in Task.by_user_query(user.id),
+      where: fragment("searchable @@ websearch_to_tsquery(?)", ^term),
+      limit: 20,
+      order_by: {
+        :desc,
+        fragment("ts_rank_cd(searchable, websearch_to_tsquery(?), 4)", ^term)
+      }
+    )
+    |> Repo.all()
+  end
+
   def data(current_user) do
     Dataloader.Ecto.new(Atomic.Repo,
       query: &query/2,

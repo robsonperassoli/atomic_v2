@@ -49,6 +49,13 @@ defmodule AtomicWeb.Schema do
 
       resolve &AtomicWeb.Schema.Resolvers.projects/3
     end
+
+    field :tasks, list_of(:task) do
+      arg :term, non_null(:string)
+      middleware AtomicWeb.Schema.AuthenticationMiddleware
+
+      resolve &AtomicWeb.Schema.Resolvers.tasks/3
+    end
   end
 
   mutation do

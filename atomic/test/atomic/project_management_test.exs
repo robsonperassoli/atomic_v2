@@ -234,4 +234,18 @@ defmodule Atomic.ProjectManagementTest do
       assert {:error, _cs} = ProjectManagement.stop_task_timer(user, task.id)
     end
   end
+
+  describe "search" do
+    setup do
+      %{user: insert(:user)}
+    end
+
+    test "returns expected results when searching for description", %{user: user} do
+      insert_list(5, :task, created_by_user: user)
+      insert(:task, created_by_user: user, content: "build api")
+
+      assert [task] = ProjectManagement.search_tasks(user, "build api")
+      assert task.content == "build api"
+    end
+  end
 end
